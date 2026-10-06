@@ -432,6 +432,10 @@ class SaraminCrawler:
             if job['link'] not in seen_links:
                 unique_jobs.append(job)
                 seen_links.add(job['link'])
+
+        # 경력 필터 (신입, 신입·경력, 경력무관만)
+        unique_jobs = [j for j in unique_jobs if '신입' in j['career'] or '무관' in j['career']]
+                
         # 근무지역 필터 (서울 전체 + 고양시)
         regions = ['서울', '고양']
         unique_jobs = [j for j in unique_jobs if any(r in j['location'] for r in regions)]
