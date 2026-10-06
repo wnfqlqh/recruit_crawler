@@ -393,28 +393,22 @@ class SaraminCrawler:
         print("🚀 크롤링 시작!")
 
         # 다양한 검색 조건들
+        keywords = [
+            '콘텐츠 기획', '콘텐츠 에디터', '출판 편집', '출판 기획',
+            '공연기획', '문화기획', '행사기획', '마케팅', '엔터테인먼트',
+            '웹툰 PD', '웹소설 PD', '웹툰 제작', '미디어', '공연',
+            '마케팅 기획', 'SNS 마케팅', '기획MD',
+        ]
+
         search_configs = [
             {
-                'name': '병원 데이터 고연봉 정규직',
-                'keyword': '병원 데이터',
-                'salary_min': '3000만원~',
-                'company_types': ['대기업', '중견기업'],
-                'job_types': ['정규직'],
-            },
-            {
-                'name': '스타트업 PM 재택근무',
-                'keyword': 'PM',
-                'company_types': ['스타트업'],
-                'job_types': ['정규직', '계약직'],
-                'remote_work': True,
-                'work_day': ['유연근무제']
-            },
-            {
-                'name': '헬스케어 기획직',
-                'keyword': '헬스케어',
-                'job_types': ['정규직'],
-                'exclude_keywords': ['학교'],
+                'name': kw,
+                'keyword': kw,
+                'salary_min': '2400만원~',
+                'job_types': ['정규직', '전임', '해외취업'],
+                'exclude_keywords': ['텔레마케팅', '보험'],
             }
+            for kw in keywords
         ]
 
         all_jobs = []
@@ -438,7 +432,9 @@ class SaraminCrawler:
             if job['link'] not in seen_links:
                 unique_jobs.append(job)
                 seen_links.add(job['link'])
-
+        # 근무지역 필터 (서울 전체 + 고양시)
+        regions = ['서울', '고양']
+        unique_jobs = [j for j in unique_jobs if any(r in j['location'] for r in regions)]
         print(f"\n🎉 총 {len(unique_jobs)}개 고유 공고 수집!")
 
         # CSV 저장
